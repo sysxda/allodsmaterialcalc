@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор астралиумного материала</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Калькулятор астралиумного материала</h1>
+        
+        <label for="materialInput">Введите необходимое количество астралиумного материала (не менее 1270):</label>
+        <input type="number" id="materialInput" required>
+        
+        <label for="hammerSelect">Выберите инструменты:</label>
+        <select id="hammerSelect">
+            <option value="128">Инструменты ремесленника</option>
+            <option value="192">Универсальные инструменты</option>
+            <option value="256">Инструменты доминиона</option>
+        </select>
+        
+        <button id="calculateButton">Рассчитать</button>
+        
+        <div id="resultText"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
