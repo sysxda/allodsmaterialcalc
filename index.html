@@ -1,30 +1,72 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор астралиумного материала</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Калькулятор Экипировки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Калькулятор астралиумного материала</h1>
-        
-        <label for="materialInput">Введите необходимое количество астралиумного материала (не менее 1270):</label>
-        <input type="number" id="materialInput" required>
-        
-        <label for="hammerSelect">Выберите инструменты:</label>
-        <select id="hammerSelect">
-            <option value="128">Инструменты ремесленника</option>
-            <option value="192">Универсальные инструменты</option>
-            <option value="256">Инструменты доминиона</option>
-        </select>
-        
-        <button id="calculateButton">Рассчитать</button>
-        
-        <div id="resultText"></div>
+    <div class="container-fluid container-md py-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 mb-0">Калькулятор Экипировки</h1>
+            <button class="btn btn-outline-primary" id="theme-toggle">
+                <i class="bi" id="theme-icon"></i>
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form class="row g-3" onsubmit="return false;">
+                    <div class="col-md-6">
+                        <label for="item-quality" class="form-label">Качество предмета</label>
+                        <select id="item-quality" class="form-select">
+                            <option value="green">Добротное (100%) - Замечательное (110%)</option>
+                            <option value="blue">Замечательное (110%) - Редкое (110%)</option>
+                            <option value="purple">Редкое (110%) - Легендарное (110%)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="item-count" class="form-label">Количество предметов (1-15)</label>
+                        <input type="number" id="item-count" class="form-control" value="1" min="1" max="15">
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check mb-3" style="display: none;">
+                            <input class="form-check-input" type="checkbox" id="include-weapons">
+                            <label class="form-check-label" for="include-weapons">
+                                Включать комплект оружия
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="include-details-craft">
+                            <label class="form-check-label" for="include-details-craft">
+                                Учитывать стоимость крафта Мастеровых деталей
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button class="btn btn-primary w-100" onclick="calculateResources()">
+                            Рассчитать ресурсы
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="results" class="mt-4"></div>
+
+        <div class="text-center mt-4">
+            <p>Создали <a href="https://ghorde.ru/forum/members/jaruinilbate.64767/" target="_blank">яРуинилБате</a> , <a href="https://ghorde.ru/forum/members/sjoko.62001/" target="_blank">Сёко</a> </p>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="js/script.js"></script>
 </body>
 </html>
