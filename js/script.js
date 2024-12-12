@@ -17,10 +17,10 @@ const upgradeCosts = {
     },
     purpleToOrange: {
         zig: 390,
+        material: 135,
         details: 14,
         dust: 130,
         amalgam: 135,
-        material: 135,
         gold: 116000
     }
 };
@@ -54,28 +54,28 @@ const upgradeCostsWeapon = {
 
 const upgradeCostsShield = {
     greenToBlue: {
-        zig: 390,
-        material: 180,
-        details: 27,
-        dust: 255,
-        amalgam: 48,
-        gold: 220500,
+        zig: 260,
+        material: 0,
+        details: 12,
+        dust: 120,
+        amalgam: 24,
+        gold: 106000,
     },
     blueToPurple: {
-        zig: 660,
-        material: 315,
-        details: 33,
-        dust: 300,
-        amalgam: 57,
-        gold: 267000
+        zig: 440,
+        material: 0,
+        details: 12,
+        dust: 120,
+        amalgam: 24,
+        gold: 106000
     },
     purpleToOrange: {
-        zig: 390,
-        details: 14,
-        dust: 130,
+        zig: 780,
+        material: 0,
+        details: 16,
+        dust: 160,
         amalgam: 135,
-        material: 135,
-        gold: 116000
+        gold: 140000
     }
 };
 
@@ -226,7 +226,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
             } else if (quality === 'purple') {
                 weaponCost = upgradeCostsWeapon.purpleToOrange.gold;
             }
-            tooltipText += `Оружие: ${formatNumber(weaponCost)} \n`;
+            tooltipText += `Двуруч и скипетр: ${formatNumber(weaponCost)} \n`;
         }
         if (document.getElementById('is-shield').checked) {
             let shieldCost = 0;
@@ -238,7 +238,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
             } else if (quality === 'purple') {
                 shieldCost = upgradeCostsShield.purpleToOrange.gold;
             }
-            tooltipText += `Щит: ${formatNumber(shieldCost)} `;
+            tooltipText += `Одноруч и щит: ${formatNumber(shieldCost)} `;
         }
         
         resultHTML += `<tr><td>Золото</td><td class="text-end">${formatNumber(resources.gold)} <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" title="${tooltipText}" style="cursor: help;">?</span></td></tr>`;
