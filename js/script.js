@@ -1,19 +1,3 @@
-function getPreferredTheme() {
-    const storedTheme = localStorage.getItem('theme')
-    return storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-}
-
-function setTheme(theme) {
-    document.documentElement.setAttribute('data-bs-theme', theme)
-    localStorage.setItem('theme', theme)
-    updateThemeIcon(theme)
-}
-
-function updateThemeIcon(theme) {
-    const icon = document.getElementById('theme-icon')
-    icon.className = `bi bi-${theme === 'dark' ? 'sun' : 'moon'}-fill`
-}
-
 const upgradeCosts = {
     greenToBlue: {
         zig: 130,
@@ -38,7 +22,61 @@ const upgradeCosts = {
         amalgam: 135,
         material: 135,
         gold: 116000
-        }
+    }
+};
+
+const upgradeCostsWeapon = {
+    greenToBlue: {
+        zig: 390,
+        material: 180,
+        details: 27,
+        dust: 255,
+        amalgam: 48,
+        gold: 220500,
+    },
+    blueToPurple: {
+        zig: 660,
+        material: 315,
+        details: 33,
+        dust: 300,
+        amalgam: 57,
+        gold: 267000
+    },
+    purpleToOrange: {
+        zig: 1170,
+        material: 405,
+        details: 42,
+        dust: 390,
+        amalgam: 69,
+        gold: 348000
+    }
+};
+
+const upgradeCostsShield = {
+    greenToBlue: {
+        zig: 390,
+        material: 180,
+        details: 27,
+        dust: 255,
+        amalgam: 48,
+        gold: 220500,
+    },
+    blueToPurple: {
+        zig: 660,
+        material: 315,
+        details: 33,
+        dust: 300,
+        amalgam: 57,
+        gold: 267000
+    },
+    purpleToOrange: {
+        zig: 390,
+        details: 14,
+        dust: 130,
+        amalgam: 135,
+        material: 135,
+        gold: 116000
+    }
 };
 
 function formatNumber(num) {
@@ -46,10 +84,23 @@ function formatNumber(num) {
 }
 
 function calculateResources() {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `
+        <div class="card shadow-sm calculating">
+            <div class="card-body text-center">
+                <div class="spinner-border text-primary mb-2" role="status">
+                    <span class="visually-hidden">Выполняется расчет...</span>
+                </div>
+                <p class="mb-0">Выполняется расчет...</p>
+            </div>
+        </div>
+    `;
+
     const quality = document.getElementById('item-quality').value;
     const count = Math.min(Math.max(parseInt(document.getElementById('item-count').value) || 1, 1), 15);
-    const includeWeapons = document.getElementById('include-weapons').checked;
     const includeDetailsCraft = document.getElementById('include-details-craft').checked;
+    const isWeapon = document.getElementById('is-weapon').checked;
+    const isShield = document.getElementById('is-shield').checked;
 
     const resources = {
         zig: 0,
@@ -63,15 +114,20 @@ function calculateResources() {
 
     if (quality !== 'orange') {
         let upgradePath;
+        let weaponUpgradePath;
+        
         switch(quality) {
             case 'green':
                 upgradePath = upgradeCosts.greenToBlue;
+                weaponUpgradePath = upgradeCostsWeapon.greenToBlue;
                 break;
             case 'blue':
                 upgradePath = upgradeCosts.blueToPurple;
+                weaponUpgradePath = upgradeCostsWeapon.blueToPurple;
                 break;
             case 'purple':
                 upgradePath = upgradeCosts.purpleToOrange;
+                weaponUpgradePath = upgradeCostsWeapon.purpleToOrange;
                 break;
         }
 
@@ -82,13 +138,23 @@ function calculateResources() {
         resources.gold = upgradePath.gold * count;
         resources.material = upgradePath.material * count;
 
-        if (includeWeapons) {
-            resources.zig += upgradePath.zig * 3;
-            resources.details += upgradePath.details * 3;
-            resources.dust += upgradePath.dust * 3;
-            resources.amalgam += upgradePath.amalgam * 3;
-            resources.gold += upgradePath.gold * 3;
-            resources.material += upgradePath.material * 3;
+        if (isWeapon) {
+            resources.zig += weaponUpgradePath.zig;
+            resources.details += weaponUpgradePath.details;
+            resources.dust += weaponUpgradePath.dust;
+            resources.amalgam += weaponUpgradePath.amalgam;
+            resources.gold += weaponUpgradePath.gold;
+            resources.material += weaponUpgradePath.material;
+        }
+
+        if (isShield) {
+            const shieldUpgradePath = upgradeCostsShield[quality === 'green' ? 'greenToBlue' : quality === 'blue' ? 'blueToPurple' : 'purpleToOrange'];
+            resources.zig += shieldUpgradePath.zig;
+            resources.details += shieldUpgradePath.details;
+            resources.dust += shieldUpgradePath.dust;
+            resources.amalgam += shieldUpgradePath.amalgam;
+            resources.gold += shieldUpgradePath.gold;
+            resources.material += shieldUpgradePath.material;
         }
     }
 
@@ -98,82 +164,125 @@ function calculateResources() {
         resources.gold += resources.detailsCraftCost;
     }
 
-    displayResults(resources);
+    displayResults(resources, quality, includeDetailsCraft);
 }
 
-function displayResults(resources) {
+function displayResults(resources, quality, includeDetailsCraft) {
     const resultsDiv = document.getElementById('results');
-    const includeDetailsCraft = document.getElementById('include-details-craft').checked;
-    const quality = document.getElementById('item-quality').value;
+
+    const newResults = document.createElement('div');
+    newResults.className = 'card shadow-sm new-result';
     
     let resultHTML = `
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="card-title quality-${quality}">Результаты:</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th>Ресурс</th>
-                                <th class="text-end">Количество</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+        <div class="card-body">
+            <h3 class="card-title quality-${quality}">Результаты расчета</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Ресурс</th>
+                            <th class="text-end">Количество</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
 
     if (resources.zig > 0) {
-        resultHTML += `<tr><td>Знак инсигнии героя <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" title="<img src='img/zig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.zig)}</td></tr>`;
+        resultHTML += `<tr><td>Знак инсигнии героя<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/zig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.zig)}</td></tr>`;
     }
 
     if (resources.material > 0) {
-        resultHTML += `<tr><td>Зачарованный материал <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" title="<img src='img/material.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.material)}</td></tr>`;
+        resultHTML += `<tr><td>Зачарованный материал<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/material.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.material)}</td></tr>`;
     }
 
     if (resources.dust > 0) {
-        resultHTML += `<tr><td>Зачарованная пыльца <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" title="<img src='img/pylca.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.dust)}</td></tr>`;
+        resultHTML += `<tr><td>Зачарованная пыльца<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/pylca.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.dust)}</td></tr>`;
     }
 
     if (resources.details > 0) {
-        resultHTML += `<tr><td>Мастеровые детали <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" title="<img src='img/master.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.details)}</td></tr>`;
+        resultHTML += `<tr><td>Мастеровые детали<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/master.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.details)}</td></tr>`;
     }
 
     if (resources.amalgam > 0) {
-        resultHTML += `<tr><td>Амальгама <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" title="<img src='img/alma.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.amalgam)}</td></tr>`;
+        resultHTML += `<tr><td>Амальгама<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/alma.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.amalgam)}</td></tr>`;
     }
 
     if (resources.gold > 0) {
-        resultHTML += `<tr><td>Золото</td><td class="text-end">${formatNumber(resources.gold)}${includeDetailsCraft && resources.detailsCraftCost > 0 ? ` <small class="text-muted">(включая ${formatNumber(resources.detailsCraftCost)} за крафт Мастеровых деталей)</small>` : ''}</td></tr>`;
+        let tooltipText = '';
+        const quality = document.getElementById('item-quality').value;
+        const count = Math.min(Math.max(parseInt(document.getElementById('item-count').value) || 1, 1), 15);
+        const craftCost = quality === 'green' ? 73500 * count : quality === 'blue' ? 89000 * count : 116000 * count;
+        tooltipText += `Крафт предметов: ${formatNumber(craftCost)} \n`;
+        
+        if (resources.detailsCraftCost > 0) {
+            tooltipText += `Мастеровые детали: ${formatNumber(resources.detailsCraftCost)} \n`;
+        }
+        if (document.getElementById('is-weapon').checked) {
+            let weaponCost = 0;
+            const quality = document.getElementById('item-quality').value;
+            if (quality === 'green') {
+                weaponCost = upgradeCostsWeapon.greenToBlue.gold;
+            } else if (quality === 'blue') {
+                weaponCost = upgradeCostsWeapon.blueToPurple.gold;
+            } else if (quality === 'purple') {
+                weaponCost = upgradeCostsWeapon.purpleToOrange.gold;
+            }
+            tooltipText += `Оружие: ${formatNumber(weaponCost)} \n`;
+        }
+        if (document.getElementById('is-shield').checked) {
+            let shieldCost = 0;
+            const quality = document.getElementById('item-quality').value;
+            if (quality === 'green') {
+                shieldCost = upgradeCostsShield.greenToBlue.gold;
+            } else if (quality === 'blue') {
+                shieldCost = upgradeCostsShield.blueToPurple.gold;
+            } else if (quality === 'purple') {
+                shieldCost = upgradeCostsShield.purpleToOrange.gold;
+            }
+            tooltipText += `Щит: ${formatNumber(shieldCost)} `;
+        }
+        
+        resultHTML += `<tr><td>Золото</td><td class="text-end">${formatNumber(resources.gold)} <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" title="${tooltipText}" style="cursor: help;">?</span></td></tr>`;
     }
 
     resultHTML += `
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>`;
-    
-    resultsDiv.innerHTML = resultHTML;
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
 
-    const tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+    newResults.innerHTML = resultHTML;
+    resultsDiv.innerHTML = '';
+    resultsDiv.appendChild(newResults);
+    resultsDiv.classList.add('visible');
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].forEach(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+}
+
+function updateThemeIcon(theme) {
+    const icon = document.getElementById('theme-icon');
+    icon.className = theme === 'dark' ? 'bi-moon-fill' : 'bi-sun-fill';
+
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+    } else {
+        document.body.classList.remove('dark-theme');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setTheme(getPreferredTheme())
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
     document.getElementById('theme-toggle').addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-bs-theme')
-        setTheme(currentTheme === 'dark' ? 'light' : 'dark')
-    })
-
-    const itemCountInput = document.getElementById('item-count')
-    itemCountInput.addEventListener('input', function() {
-        this.value = Math.min(Math.max(parseInt(this.value) || 1, 1), 15)
-    })
-
-    const inputs = ['item-quality', 'item-count', 'include-weapons', 'include-details-craft']
-    inputs.forEach(id => {
-        document.getElementById(id).addEventListener('change', calculateResources)
-    })
-
-    calculateResources()
-})
+        const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+});

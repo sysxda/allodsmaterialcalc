@@ -1,5 +1,13 @@
 body {
     padding: 15px;
+    background-color: #ffffff;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-theme {
+    background-color: #212529;
+    color: #f8f9fa;
 }
 
 .container {
@@ -7,16 +15,25 @@ body {
     padding: 15px;
 }
 
-h1 {
+h1, h3 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    text-align: center;
+    font-weight: bold;
+    color: inherit;
 }
 
 .card {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 1rem;
+    background-color: #ffffff;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-theme .card {
+    background-color: #343a40;
+    color: #f8f9fa;
 }
 
 .card-body {
@@ -26,11 +43,25 @@ h1 {
 .form-label {
     font-weight: 500;
     margin-bottom: 0.5rem;
+    color: inherit;
 }
 
 .form-select, .form-control {
     margin-bottom: 1rem;
     width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark-theme .form-select, 
+body.dark-theme .form-control {
+    background-color: #495057;
+    color: #f8f9fa;
+    border-color: #6c757d;
 }
 
 .btn-primary {
@@ -38,72 +69,135 @@ h1 {
     padding: 0.75rem;
     font-size: 1.1rem;
     margin-top: 0.5rem;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-theme .btn-primary {
+    background-color: #0056b3;
 }
 
 .table {
     font-size: 0.9rem;
     margin-top: 1rem;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-theme .table {
+    background-color: #343a40;
+    color: #f8f9fa;
 }
 
 .table th, .table td {
     padding: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+body.dark-theme .table th, 
+body.dark-theme .table td {
+    border-color: #495057;
 }
 
 .tooltip-icon {
-    cursor: help;
-    margin-left: 5px;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background: #6c757d;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    text-align: center;
-    line-height: 16px;
+    background-color: #e9ecef;
+    color: #6c757d;
     font-size: 12px;
+    margin-left: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.tooltip-image {
-    max-width: 200px;
-    height: auto;
+body.dark-theme .tooltip-icon {
+    background-color: #495057;
+    color: #f8f9fa;
 }
 
 .tooltip-inner {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
+    padding: 8px 12px;
+    max-width: 300px;
+    text-align: left;
+    white-space: pre-line;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.tooltip .tooltip-arrow {
-    display: none;
+body.dark-theme .tooltip-inner {
+    background-color: #343a40;
+    color: #f8f9fa;
+    border-color: #495057;
+}
+
+#results {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#results.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.quality-green {
+    color: #28a745;
+}
+
+.quality-blue {
+    color: #007bff;
+}
+
+.quality-purple {
+    color: #6f42c1;
+}
+
+.new-result {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calculating {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.2);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+    }
 }
 
 @media (min-width: 768px) {
     .container {
         max-width: 720px;
-        margin: 0 auto;
-        padding: 30px;
-    }
-
-    h1 {
-        font-size: 2.2rem;
-    }
-
-    .card-body {
-        padding: 1.5rem;
-    }
-
-    .table {
-        font-size: 1rem;
-    }
-
-    .table th, .table td {
-        padding: 0.75rem;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 960px;
     }
 }
