@@ -1,23 +1,26 @@
 const upgradeCosts = {
     greenToBlue: {
-        zig: 130,
+        insig: 130,
         material: 60,
+        znak: 1,
         details: 12,
         dust: 110,
         amalgam: 20,
         gold: 73500,
     },
     blueToPurple: {
-        zig: 220,
+        insig: 220,
         material: 105,
+        znak: 2,
         details: 11,
         dust: 100,
         amalgam: 19,
         gold: 89000
     },
     purpleToOrange: {
-        zig: 390,
+        insig: 390,
         material: 135,
+        znak: 3,
         details: 14,
         dust: 130,
         amalgam: 135,
@@ -27,24 +30,27 @@ const upgradeCosts = {
 
 const upgradeCostsWeapon = {
     greenToBlue: {
-        zig: 390,
+        insig: 390,
         material: 180,
+        znak: 5,
         details: 27,
         dust: 255,
         amalgam: 48,
         gold: 220500,
     },
     blueToPurple: {
-        zig: 660,
+        insig: 660,
         material: 315,
+        znak: 5,
         details: 33,
         dust: 300,
         amalgam: 57,
         gold: 267000
     },
     purpleToOrange: {
-        zig: 1170,
+        insig: 1170,
         material: 405,
+        znak: 5,
         details: 42,
         dust: 390,
         amalgam: 69,
@@ -54,24 +60,27 @@ const upgradeCostsWeapon = {
 
 const upgradeCostsShield = {
     greenToBlue: {
-        zig: 260,
+        insig: 260,
         material: 0,
+        znak: 0,
         details: 12,
         dust: 120,
         amalgam: 24,
         gold: 106000,
     },
     blueToPurple: {
-        zig: 440,
+        insig: 440,
         material: 0,
+        znak: 0,
         details: 12,
         dust: 120,
         amalgam: 24,
         gold: 106000
     },
     purpleToOrange: {
-        zig: 780,
+        insig: 780,
         material: 0,
+        znak: 0,
         details: 16,
         dust: 160,
         amalgam: 135,
@@ -103,12 +112,13 @@ function calculateResources() {
     const isShield = document.getElementById('is-shield').checked;
 
     const resources = {
-        zig: 0,
+        insig: 0,
+        material: 0,
+        znak: 0,
         details: 0,
         dust: 0,
         amalgam: 0,
         gold: 0,
-        material: 0,
         detailsCraftCost: 0
     };
 
@@ -131,16 +141,18 @@ function calculateResources() {
                 break;
         }
 
-        resources.zig = upgradePath.zig * count;
+        resources.insig = upgradePath.insig * count;
         resources.details = upgradePath.details * count;
+        resources.znak = upgradePath.znak * count;
         resources.dust = upgradePath.dust * count;
         resources.amalgam = upgradePath.amalgam * count;
         resources.gold = upgradePath.gold * count;
         resources.material = upgradePath.material * count;
 
         if (isWeapon) {
-            resources.zig += weaponUpgradePath.zig;
+            resources.insig += weaponUpgradePath.insig;
             resources.details += weaponUpgradePath.details;
+            resources.znak += weaponUpgradePath.znak;
             resources.dust += weaponUpgradePath.dust;
             resources.amalgam += weaponUpgradePath.amalgam;
             resources.gold += weaponUpgradePath.gold;
@@ -149,8 +161,9 @@ function calculateResources() {
 
         if (isShield) {
             const shieldUpgradePath = upgradeCostsShield[quality === 'green' ? 'greenToBlue' : quality === 'blue' ? 'blueToPurple' : 'purpleToOrange'];
-            resources.zig += shieldUpgradePath.zig;
+            resources.insig += shieldUpgradePath.insig;
             resources.details += shieldUpgradePath.details;
+            resources.znak += shieldUpgradePath.znak;
             resources.dust += shieldUpgradePath.dust;
             resources.amalgam += shieldUpgradePath.amalgam;
             resources.gold += shieldUpgradePath.gold;
@@ -186,8 +199,12 @@ function displayResults(resources, quality, includeDetailsCraft) {
                     </thead>
                     <tbody>`;
 
-    if (resources.zig > 0) {
-        resultHTML += `<tr><td>Знак инсигнии героя<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/zig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.zig)}</td></tr>`;
+    if (resources.insig > 0) {
+        resultHTML += `<tr><td>Знаки инсигнии героя<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/insig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.insig)}</td></tr>`;
+    }
+
+    if (resources.znak > 0) {
+        resultHTML += `<tr><td>Знаки астралиума<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/znak.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.znak)}</td></tr>`;
     }
 
     if (resources.material > 0) {
@@ -195,7 +212,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
     }
 
     if (resources.dust > 0) {
-        resultHTML += `<tr><td>Зачарованная пыльца<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/pylca.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.dust)}</td></tr>`;
+        resultHTML += `<tr><td>Зачарованная пыльца<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/dust.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.dust)}</td></tr>`;
     }
 
     if (resources.details > 0) {
@@ -203,7 +220,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
     }
 
     if (resources.amalgam > 0) {
-        resultHTML += `<tr><td>Амальгама<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/alma.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.amalgam)}</td></tr>`;
+        resultHTML += `<tr><td>Амальгама<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/amalgam.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.amalgam)}</td></tr>`;
     }
 
     if (resources.gold > 0) {
