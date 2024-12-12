@@ -1,91 +1,19 @@
 const upgradeCosts = {
-    greenToBlue: {
-        insig: 130,
-        material: 60,
-        znak: 1,
-        details: 12,
-        dust: 110,
-        amalgam: 20,
-        gold: 73500,
-    },
-    blueToPurple: {
-        insig: 220,
-        material: 105,
-        znak: 2,
-        details: 11,
-        dust: 100,
-        amalgam: 19,
-        gold: 89000
-    },
-    purpleToOrange: {
-        insig: 390,
-        material: 135,
-        znak: 3,
-        details: 14,
-        dust: 130,
-        amalgam: 135,
-        gold: 116000
-    }
+    greenToBlue: { insig: 130, material: 60, znak: 1, details: 12, dust: 110, amalgam: 20, gold: 73500 },
+    blueToPurple: { insig: 220, material: 105, znak: 2, details: 11, dust: 100, amalgam: 19, gold: 89000 },
+    purpleToOrange: { insig: 390, material: 135, znak: 3, details: 14, dust: 130, amalgam: 135, gold: 116000 }
 };
 
 const upgradeCostsWeapon = {
-    greenToBlue: {
-        insig: 390,
-        material: 180,
-        znak: 5,
-        details: 27,
-        dust: 255,
-        amalgam: 48,
-        gold: 220500,
-    },
-    blueToPurple: {
-        insig: 660,
-        material: 315,
-        znak: 5,
-        details: 33,
-        dust: 300,
-        amalgam: 57,
-        gold: 267000
-    },
-    purpleToOrange: {
-        insig: 1170,
-        material: 405,
-        znak: 5,
-        details: 42,
-        dust: 390,
-        amalgam: 69,
-        gold: 348000
-    }
+    greenToBlue: { insig: 390, material: 180, znak: 5, details: 27, dust: 255, amalgam: 48, gold: 220500 },
+    blueToPurple: { insig: 660, material: 315, znak: 5, details: 33, dust: 300, amalgam: 57, gold: 267000 },
+    purpleToOrange: { insig: 1170, material: 405, znak: 5, details: 42, dust: 390, amalgam: 69, gold: 348000 }
 };
 
 const upgradeCostsShield = {
-    greenToBlue: {
-        insig: 260,
-        material: 0,
-        znak: 0,
-        details: 12,
-        dust: 120,
-        amalgam: 24,
-        gold: 106000,
-    },
-    blueToPurple: {
-        insig: 440,
-        material: 0,
-        znak: 0,
-        details: 12,
-        dust: 120,
-        amalgam: 24,
-        gold: 106000
-    },
-    purpleToOrange: {
-        insig: 780,
-        material: 0,
-        znak: 0,
-        details: 16,
-        dust: 160,
-        amalgam: 135,
-        gold: 140000
-    }
+    greenToBlue: { insig: 260, material: 0, znak: 0, details: 12, dust: 120, amalgam: 24, gold: 106000 },
+    blueToPurple: { insig: 440, material: 0, znak: 0, details: 12, dust: 120, amalgam: 24, gold: 106000 },
+    purpleToOrange: { insig: 780, material: 0, znak: 0, details: 16, dust: 160, amalgam: 135, gold: 140000 }
 };
 
 function formatNumber(num) {
@@ -200,7 +128,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
                     <tbody>`;
 
     if (resources.insig > 0) {
-        resultHTML += `<tr><td>Знаки инсигнии героя<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/insig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.insig)}</td></tr>`;
+        resultHTML += `<tr><td>Знаки инсигний героя<span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<img src='img/insig.png' class='tooltip-image'>">?</span></td><td class="text-end">${formatNumber(resources.insig)}</td></tr>`;
     }
 
     if (resources.znak > 0) {
