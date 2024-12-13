@@ -193,7 +193,7 @@ body.dark-theme .tooltip-inner {
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 767px) {
     .container {
         max-width: 720px;
     }
