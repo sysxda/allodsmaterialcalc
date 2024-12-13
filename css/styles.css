@@ -23,8 +23,6 @@ h1, h3 {
 }
 
 .card {
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 1rem;
     background-color: #ffffff;
     color: #212529;
@@ -65,7 +63,6 @@ body.dark-theme .form-control {
 }
 
 .btn-primary {
-    width: 100%;
     padding: 0.75rem;
     font-size: 1.1rem;
     margin-top: 0.5rem;
@@ -81,7 +78,6 @@ body.dark-theme .btn-primary {
 }
 
 .table {
-    font-size: 0.9rem;
     margin-top: 1rem;
     width: 100%;
     border-collapse: collapse;
