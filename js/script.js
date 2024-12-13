@@ -156,7 +156,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
         const quality = document.getElementById('item-quality').value;
         const count = Math.min(Math.max(parseInt(document.getElementById('item-count').value) || 1, 1), 15);
         const craftCost = quality === 'green' ? 73500 * count : quality === 'blue' ? 89000 * count : 116000 * count;
-        tooltipText += `Предметы: ${formatNumber(craftCost)} \n`;
+        tooltipText += `Предметы экипировки: ${formatNumber(craftCost)} \n`;
         
         if (resources.detailsCraftCost > 0) {
             tooltipText += `Мастеровые детали: ${formatNumber(resources.detailsCraftCost)} \n`;
