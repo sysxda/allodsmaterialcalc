@@ -44,14 +44,14 @@ body.dark-theme .card {
 }
 
 .form-label {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: inherit;
 }
 
 .form-select, .form-control {
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-bottom: 1rem;
     width: 100%;
     padding: 0.75rem;
@@ -95,7 +95,7 @@ body.dark-theme .btn-primary:hover {
 }
 
 .table {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin-top: 1rem;
     width: 100%;
     border-collapse: collapse;
