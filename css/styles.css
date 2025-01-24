@@ -50,6 +50,10 @@ body.dark-theme .card {
     color: inherit;
 }
 
+.form-check-label {
+    font-size: 0.9rem;
+}
+
 .form-select, .form-control {
     font-size: 0.9rem;
     margin-bottom: 1rem;
