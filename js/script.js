@@ -116,7 +116,13 @@ function displayResults(resources, quality, includeDetailsCraft) {
     
     let resultHTML = `
         <div class="card-body">
-            <h3 class="card-title quality-${quality}">Результаты расчета</h3>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="card-title quality-${quality} mb-0">Результаты расчета</h3>
+                <button class="btn btn-outline-success d-flex align-items-center" id="save-png">
+                    <i class="bi bi-image"></i>
+                    <span class="ms-2 d-none d-md-inline">Сохранить результат</span>
+                </button>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered mb-0">
                     <thead>
@@ -189,19 +195,48 @@ function displayResults(resources, quality, includeDetailsCraft) {
         resultHTML += `<tr><td>Золото</td><td class="text-end">${formatNumber(resources.gold)} <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" title="${tooltipText}" style="cursor: help;">?</span></td></tr>`;
     }
 
-    resultHTML += `
-                            </tbody>
-                        </table>
-                    </div>
-                </div>`;
+    resultHTML += `</tbody></table></div></div>`;
 
     newResults.innerHTML = resultHTML;
     resultsDiv.innerHTML = '';
     resultsDiv.appendChild(newResults);
     resultsDiv.classList.add('visible');
 
+    const saveButton = document.getElementById('save-png');
+    if(saveButton) {
+        saveButton.addEventListener('click', saveAsPNG);
+    }
+
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     [...tooltipTriggerList].forEach(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+}
+
+function saveAsPNG() {
+    const element = document.querySelector('.new-result');
+    if (!element) return;
+
+    const watermark = document.createElement('div');
+    watermark.className = 'watermark';
+    watermark.textContent = 'https://sysxda.github.io/allodsmaterialcalc';
+
+    element.appendChild(watermark);
+
+    html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        onclone: (clonedDoc) => {
+            clonedDoc.querySelector('.watermark')?.classList.add('watermark');
+        }
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Результаты экипировки.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        element.removeChild(watermark);
+    }).catch(error => {
+        console.error('Ошибка:', error);
+        watermark.parentElement?.removeChild(watermark);
+    });
 }
 
 function updateThemeIcon(theme) {
