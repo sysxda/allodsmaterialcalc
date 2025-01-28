@@ -117,7 +117,7 @@ function displayResults(resources, quality, includeDetailsCraft) {
     let resultHTML = `
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="card-title quality-${quality} mb-0">Результаты расчета</h3>
+                <h2 class="card-title quality-${quality} mb-0">Результаты расчета</h2>
                 <button class="btn btn-outline-success d-flex align-items-center" id="save-png">
                     <i class="bi bi-image"></i>
                     <span class="ms-2 d-none d-md-inline">Сохранить результат</span>
