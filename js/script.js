@@ -218,7 +218,6 @@ function saveAsPNG() {
     const watermark = document.createElement('div');
     watermark.className = 'watermark';
     watermark.textContent = 'https://sysxda.github.io/allodsmaterialcalc';
-
     element.appendChild(watermark);
 
     html2canvas(element, {
@@ -228,11 +227,24 @@ function saveAsPNG() {
             clonedDoc.querySelector('.watermark')?.classList.add('watermark');
         }
     }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'Результаты экипировки.png';
-        link.href = canvas.toDataURL();
-        link.click();
-        element.removeChild(watermark);
+        const fileName = 'equipment_results.png';
+
+        canvas.toBlob((blob) => {
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.href = url;
+            link.download = fileName;
+
+            if ('download' in link) {
+                link.click();
+            } else {
+                window.open(url, '_blank');
+            }
+
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            element.removeChild(watermark);
+        }, 'image/png');
     }).catch(error => {
         console.error('Ошибка:', error);
         watermark.parentElement?.removeChild(watermark);
